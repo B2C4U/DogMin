@@ -19,3 +19,4 @@ used the commandline te generate an empty sln, and used the new project feature 
 
 For sanaity, moved files in right place and in solution folders for easy grouping
 Added .editor config to the solution based on c# defaults.
+Code clean upon save configured 
