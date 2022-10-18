@@ -18,3 +18,4 @@ We created the repo and put some boiler plate code into use.
 used the commandline te generate an empty sln, and used the new project feature visual studio to create a basic Wasm Blazor project. 
 
 For sanaity, moved files in right place and in solution folders for easy grouping
+Added .editor config to the solution based on c# defaults.
