@@ -36,6 +36,16 @@ namespace Dogmin.Web.server.Server
             {
                 _ = app.UseMigrationsEndPoint();
                 app.UseWebAssemblyDebugging();
+
+                using (var scope = app.Services.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    _ = dbContext.Database.EnsureCreated();
+                    // use context
+                }
+
+
+
             }
             else
             {
@@ -45,17 +55,12 @@ namespace Dogmin.Web.server.Server
             }
 
             _ = app.UseHttpsRedirection();
-
             _ = app.UseBlazorFrameworkFiles();
             _ = app.UseStaticFiles();
-
             _ = app.UseRouting();
-
             _ = app.UseIdentityServer();
             _ = app.UseAuthentication();
             _ = app.UseAuthorization();
-
-
             _ = app.MapRazorPages();
             _ = app.MapControllers();
             _ = app.MapFallbackToFile("index.html");
