@@ -9,12 +9,12 @@ namespace Dogmin.Web.server.Server
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             _ = builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+               options.UseSqlServer(connectionString));
             _ = builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             _ = builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -29,7 +29,7 @@ namespace Dogmin.Web.server.Server
             _ = builder.Services.AddControllersWithViews();
             _ = builder.Services.AddRazorPages();
 
-            var app = builder.Build();
+            WebApplication app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -37,14 +37,10 @@ namespace Dogmin.Web.server.Server
                 _ = app.UseMigrationsEndPoint();
                 app.UseWebAssemblyDebugging();
 
-                using (var scope = app.Services.CreateScope())
-                {
-                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                    _ = dbContext.Database.EnsureCreated();
-                    // use context
-                }
-
-
+                using IServiceScope scope = app.Services.CreateScope();
+                ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                _ = dbContext.Database.EnsureCreated();
+                // use context
 
             }
             else
